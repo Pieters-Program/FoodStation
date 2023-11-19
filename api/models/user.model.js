@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-    }
+    },
+    avatar: {
+        type: String,
+        default: 'https://www.advancedsec.com/wp-content/uploads/2018/11/profile-blank.png'
+    },
 }, {
     timestamps: true
 });
