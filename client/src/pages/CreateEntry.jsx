@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
 
-export default function CreateListing() {
+export default function CreateEntry() {
     const { currentUser } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [files, setFiles] = useState([]);
@@ -125,7 +125,7 @@ export default function CreateListing() {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch('/api/listing/create', {
+      const res = await fetch('/api/entry/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/${data._id}`);
+      navigate(`/entry/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -149,7 +149,7 @@ export default function CreateListing() {
 
   return (
     <main className='p-3 max-w-4xl mx-auto'>
-        <h1 className='test-3xl font-semibold text-center my-7'>Create a Listing</h1>
+        <h1 className='test-3xl font-semibold text-center my-7'>Create a Entry</h1>
         <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
             <div className='flex flex-col gap-4 flex-1'>
             <input
@@ -336,7 +336,7 @@ export default function CreateListing() {
                 >
                     <img
                     src={url}
-                    alt='listing image'
+                    alt='entry image'
                     className='w-20 h-20 object-contain rounded-lg'
                     />
                     <button
@@ -352,7 +352,7 @@ export default function CreateListing() {
                 disabled={loading || uploading}
                 className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
             >
-                {loading ? 'Creating...' : 'Create listing'}
+                {loading ? 'Creating...' : 'Create entry'}
             </button>
             {error && <p className='text-red-700 text-sm'>{error}</p>}
             </div>

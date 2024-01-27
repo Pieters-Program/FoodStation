@@ -29,8 +29,8 @@ export default function Profile() {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [showListingsError, setShowListingsError] = useState(false);
-  const [userListings, setUserListings] = useState([]);
+  const [showEntrysError, setShowEntrysError] = useState(false);
+  const [userEntrys, setUserEntrys] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -124,24 +124,24 @@ const handleSignOut = async () => {
   }
 }
 
-const handleShowListings = async () => {
+const handleShowEntrys = async () => {
   try {
-    setShowListingsError(false);
-    const res = await fetch(`/api/user/listings/${currentUser._id}`);
+    setShowEntrysError(false);
+    const res = await fetch(`/api/user/entrys/${currentUser._id}`);
     const data = await res.json();
     if (data.success === false) {
-      setShowListingsError(true);
+      setShowEntrysError(true);
       return;
     }
-    setUserListings(data);
+    setUserEntrys(data);
   } catch (error) {
-    setShowListingsError(true);
+    setShowEntrysError(true);
   }
 };
 
-const handleListingDelete = async (listingId) => {
+const handleEntryDelete = async (entryId) => {
   try {
-    const res = await fetch(`/api/listing/delete/${listingId}`, {
+    const res = await fetch(`/api/entry/delete/${entryId}`, {
       method: 'DELETE',
     });
     const data = await res.json();
@@ -150,8 +150,8 @@ const handleListingDelete = async (listingId) => {
       return;
     }
 
-    setUserListings((prev) =>
-      prev.filter((listing) => listing._id !== listingId)
+    setUserEntrys((prev) =>
+      prev.filter((entry) => entry._id !== entryId)
     );
   } catch (error) {
     console.log(error.message);
@@ -206,8 +206,8 @@ return (
       </button>
       <Link
         className="bg-green-700 text-white rounded-lg p-3 uppercase text-center hover:opacity-95" 
-        to={"/create-listing"}>
-          Create Listing
+        to={"/create-entry"}>
+          Create Entry
         </Link>
     </form>
     <div className="flex justify-between mt-5">
@@ -216,41 +216,41 @@ return (
     </div>
     <p className='text-red-700 mt-5'>{error ? error : ''}</p>
     <p className='text-green-700 mt-5'>{updateSuccess ? 'User is updated successfully' : ''}</p>
-    <button onClick={handleShowListings} className='text-green-700 w-full'>Show listings</button>
-    <p className='text-red-700 mt-5'>{showListingsError ? 'Error showing listings' : ''}</p>
+    <button onClick={handleShowEntrys} className='text-green-700 w-full'>Show entrys</button>
+    <p className='text-red-700 mt-5'>{showEntrysError ? 'Error showing entrys' : ''}</p>
 
-    {userListings && userListings.length > 0 && (
+    {userEntrys && userEntrys.length > 0 && (
         <div className='flex flex-col gap-4'>
           <h1 className='text-center mt-7 text-2xl font-semibold'>
-            Your Listings
+            Your Entrys
           </h1>
-          {userListings.map((listing) => (
+          {userEntrys.map((entry) => (
             <div
-              key={listing._id}
+              key={entry._id}
               className='border rounded-lg p-3 flex justify-between items-center gap-4'
             >
-              <Link to={`/listing/${listing._id}`}>
+              <Link to={`/entry/${entry._id}`}>
                 <img
-                  src={listing.imageUrls[0]}
-                  alt='listing cover'
+                  src={entry.imageUrls[0]}
+                  alt='entry cover'
                   className='h-16 w-16 object-contain'
                 />
               </Link>
               <Link
                 className='text-slate-700 font-semibold  hover:underline truncate flex-1'
-                to={`/listing/${listing._id}`}
+                to={`/entry/${entry._id}`}
               >
-                <p>{listing.name}</p>
+                <p>{entry.name}</p>
               </Link>
 
               <div className='flex flex-col item-center'>
                 <button
-                  onClick={() => handleListingDelete(listing._id)}
+                  onClick={() => handleEntryDelete(entry._id)}
                   className='text-red-700 uppercase'
                 >
                   Delete
                 </button>
-                <Link to={`/update-listing/${listing._id}`}>
+                <Link to={`/update-entry/${entry._id}`}>
                   <button className='text-green-700 uppercase'>Edit</button>
                 </Link>
               </div>

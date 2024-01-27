@@ -1,68 +1,68 @@
-import Listing from "../models/listing.model.js";
+import Entry from "../models/entry.model.js";
 import { errorHandler } from "../utils/error.js";
 
-export const createListing = async (req, res, next) => {
+export const createEntry = async (req, res, next) => {
     try {
-        const listing = await Listing.create(req.body);
-        return res.status(201).json(listing)
+        const entry = await Entry.create(req.body);
+        return res.status(201).json(entry)
     } catch (error) {
         next(error)
     }
 }
 
-export const deleteListing = async (req, res, next) => {
-    const listing = await Listing.findById(req.params.id);
+export const deleteEntry = async (req, res, next) => {
+    const entry = await Entry.findById(req.params.id);
   
-    if (!listing) {
-      return next(errorHandler(404, 'Listing not found'));
+    if (!entry) {
+      return next(errorHandler(404, 'Entry not found'));
     }
   
-    if (req.user.id !== listing.userRef) {
-      return next(errorHandler(401, 'You can only delete your own listings'));
+    if (req.user.id !== entry.userRef) {
+      return next(errorHandler(401, 'You can only delete your own entrys'));
     }
   
     try {
-      await Listing.findByIdAndDelete(req.params.id);
-      res.status(200).json('Listing has been deleted');
+      await Entry.findByIdAndDelete(req.params.id);
+      res.status(200).json('Entry has been deleted');
     } catch (error) {
       next(error);
     }
   };
 
-  export const updateListing = async (req, res, next) => {
-    const listing = await Listing.findById(req.params.id);
-    if (!listing) {
-      return next(errorHandler(404, 'Listing not found'));
+  export const updateEntry = async (req, res, next) => {
+    const entry = await Entry.findById(req.params.id);
+    if (!entry) {
+      return next(errorHandler(404, 'Entry not found'));
     }
-    if (req.user.id !== listing.userRef) {
-      return next(errorHandler(401, 'You can only update your own listings'));
+    if (req.user.id !== entry.userRef) {
+      return next(errorHandler(401, 'You can only update your own entrys'));
     }
   
     try {
-      const updatedListing = await Listing.findByIdAndUpdate(
+      const updatedEntry = await Entry.findByIdAndUpdate(
         req.params.id,
         req.body,
         { new: true }
       );
-      res.status(200).json(updatedListing);
+      res.status(200).json(updatedEntry);
     } catch (error) {
       next(error);
     }
   };
   
-  export const getListing = async (req, res, next) => {
+  export const getEntry = async (req, res, next) => {
     try {
-      const listing = await Listing.findById(req.params.id);
-      if (!listing) {
-        return next(errorHandler(404, 'Listing not found!'));
+      const entry = await Entry.findById(req.params.id);
+      if (!entry) {
+        return next(errorHandler(404, 'Entry not found!'));
       }
-      res.status(200).json(listing);
+      res.status(200).json(entry);
     } catch (error) {
       next(error);
     }
   };
 
-  export const getListings = async (req, res, next) => {
+  export const getEntrys = async (req, res, next) => {
     try {
       const limit = parseInt(req.query.limit) || 9;
       const startIndex = parseInt(req.query.startIndex) || 0;
@@ -96,7 +96,7 @@ export const deleteListing = async (req, res, next) => {
   
       const order = req.query.order || 'desc';
   
-      const listings = await Listing.find({
+      const entrys = await Entry.find({
         name: { $regex: searchTerm, $options: 'i' },
         offer,
         furnished,
@@ -107,7 +107,7 @@ export const deleteListing = async (req, res, next) => {
         .limit(limit)
         .skip(startIndex);
   
-      return res.status(200).json(listings);
+      return res.status(200).json(entrys);
     } catch (error) {
       next(error);
     }

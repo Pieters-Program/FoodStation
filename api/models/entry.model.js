@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 
-const listingSchema = new mongoose.Schema(
+const entrySchema = new mongoose.Schema(
     {
         name:{
             type: String,
@@ -58,6 +58,6 @@ const listingSchema = new mongoose.Schema(
 )
 
 
-const Listing = mongoose.model('Listing', listingSchema);
+const Entry = mongoose.model('Entry', entrySchema);
 
-export default Listing;
+export default Entry;
